@@ -1,0 +1,122 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.yyt.jar</groupId>
+	<artifactId>uplaod</artifactId>
+	<version>1.0.1</version>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency> 
+			<groupId>com.yyt.ws</groupId>
+			<artifactId>upload</artifactId>
+			<version>1.0.1</version>
+		</dependency>   
+	</dependencies>
+
+	<build>
+		<finalName>dn-jack-web</finalName>
+
+		<!-- mvn cargo:run 自动部署 <plugins><plugin> <groupId>org.codehaus.cargo</groupId> 
+			<artifactId>cargo-maven2-plugin</artifactId> <version>1.2.3</version> <configuration> 
+			<container> <containerId>tomcat7x</containerId> <home>D:/workspace/apache-tomcat-7.0.63</home> 
+			</container> <configuration> <type>existing</type> <home>D:/workspace/apache-tomcat-7.0.63</home> 
+			</configuration> </configuration> <executions> <execution> <id>cargo-run</id> 
+			<phase>install</phase> <goals> <goal>run</goal> </goals> </execution> </executions> 
+			</plugin></plugins> mvn cargo:run 自动部署 -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+			<!-- 设置对auto-config.properties，jdbc.properties进行过虑，即这些文件中的${key}会被替换掉为真正的值 -->
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>jdbc.properties</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+	
+	<!-- jar上传 -->
+	<distributionManagement> 
+	<repository> 
+		<!-- 仓库名称，和 id 地址 -->
+	    <id>jack-vip-res</id>
+	    <name>jack-vip-res</name> 
+	    <url>http://192.168.10.186:8081/nexus/content/repositories/jack-vip-res</url> 
+	</repository> 
+  </distributionManagement>
+	
+	<!-- jar下载 -->
+	<!-- <repositories> 
+		<repository> 
+			<id>central</id>
+			<url>http://192.168.10.186:8081/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>central</id>
+			<url>http://192.168.10.186:8081/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories> -->
+	<profiles>
+		<profile>
+			<id>test</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<jdbc.driver>test.mysql</jdbc.driver>
+				<jdbc.url>test.url</jdbc.url>
+				<jdbc.username>test.username</jdbc.username>
+				<jdbc.password>test.password</jdbc.password>
+			</properties>
+		</profile>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<jdbc.driver>dev.mysql</jdbc.driver>
+				<jdbc.url>dev.url</jdbc.url>
+				<jdbc.username>dev.username</jdbc.username>
+				<jdbc.password>dev.password</jdbc.password>
+			</properties>
+		</profile>
+		<profile>
+			<id>product</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<jdbc.driver>product.mysql</jdbc.driver>
+				<jdbc.url>product.url</jdbc.url>
+				<jdbc.username>product.username</jdbc.username>
+				<jdbc.password>product.password</jdbc.password>
+			</properties>
+		</profile>
+	</profiles>
+</project>
